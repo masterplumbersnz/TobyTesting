@@ -62,6 +62,7 @@ exports.handler = async (event) => {
       model,
       instructions: instructions || 'You are Toby, a helpful plumbing assistant.',
       input: message,
+      temperature: 0.2,
     };
 
     // Carry conversation history forward — this replaces thread_id
@@ -75,6 +76,7 @@ exports.handler = async (event) => {
         {
           type: 'file_search',
           vector_store_ids: [vectorStoreId],
+          max_num_results: 20,
         },
       ];
     }
