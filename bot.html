@@ -1,0 +1,337 @@
+<!-- bot.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask Toby - Your Plumbing Assistant!</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Calibri, sans-serif;
+            background: #f5f7f8;
+            color: #222;
+        }
+
+        /* App layout */
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Header */
+
+        #chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e5e5e5;
+            background: white;
+        }
+
+        #chat-header img {
+            width: 36px;
+            height: 36px;
+        }
+
+        #chat-header h1 {
+            font-size: 16px;
+            margin: 0;
+            color: #00395d;
+        }
+
+        #chat-header span {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+
+        #suggestions {
+            max-width: 750px;
+            margin: 20px auto;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #suggestions button {
+            border: none;
+            background: #eef6f7;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        #new-chat {
+            background: #f2f2f2;
+            border: 1px solid black;
+            padding: 6px 12px;
+            margin: 5px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* Disclaimer */
+
+        .disclaimer {
+            font-size: 12px;
+            justify-content: center;
+            text-align: center;
+            font-style: italic;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* Chat area */
+
+        #chatbot-section {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            scroll-behavior: smooth;
+        }
+
+        /* Message column */
+
+        #messages {
+            width: 100%;
+            max-width: 750px;
+            padding: 25px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            overflow-y: auto;
+            flex: 1;
+            scroll-behavior: smooth;
+        }
+
+        /* Message bubbles */
+
+        .bubble {
+            padding: 12px 16px;
+            border-radius: 14px;
+            max-width: 75%;
+            line-height: 1.5;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .user {
+            background: #daf4f6;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+            max-width: 70%;
+            margin-left: auto;
+        }
+
+        .bot {
+            background: #ffffff;
+            border: 1px solid #e6e6e6;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+            max-width: 100%;
+        }
+
+        .copy-btn {
+            margin-top: 6px;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        /* Bot avatar layout */
+
+        .bot-message {
+            display: grid;
+            grid-template-columns: 40px 1fr;
+            column-gap: 10px;
+            align-items: start;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-top: 2px;
+        }
+
+        /* Input bar */
+
+        .chat-form {
+            display: flex;
+            gap: 10px;
+            padding: 14px;
+            border-top: 1px solid #e5e5e5;
+            background: white;
+            justify-content: center;
+        }
+
+        .chat-form textarea {
+            flex: 1;
+            max-width: 650px;
+            padding: 10px 10px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            resize: none;
+            outline: none;
+        }
+
+        .chat-form textarea:focus {
+            border-color: #5ac5cc;
+        }
+
+        /* Send button */
+
+        .chat-form button {
+            padding: 10px 16px;
+            border: none;
+            background: #5ac5cc;
+            color: white;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .chat-form button:hover {
+            background: #48b4bb;
+        }
+
+        /* Typing indicator */
+
+        .typing {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing span {
+            width: 6px;
+            height: 6px;
+            background: #888;
+            border-radius: 50%;
+            animation: bounce 1.3s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: 0.2s
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: 0.4s
+        }
+
+        .typing-avatar {
+            animation: pulse 1.4s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+        }
+
+        .copy-btn {
+            margin-top: 6px;
+            border: none;
+            background: transparent;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1);
+            }
+        }
+
+        /* Scrollbar styling */
+
+        #chatbot-section::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #chatbot-section::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 4px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            #messages {
+                padding: 16px;
+            }
+
+            .bubble {
+                max-width: 100%;
+            }
+
+            .chat-form {
+                padding: 10px;
+            }
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app">
+
+        <header id="chat-header">
+            <img src="https://capable-brioche-99db20.netlify.app/Toby-Avatar.svg" />
+            <div>
+                <h1>Ask Toby</h1>
+                <span>Your Plumbing Assistant</span>
+            </div>
+        </header>
+        <button id="new-chat">New Chat</button>
+
+        <main id="chatbot-section">
+            <div id="messages"></div>
+        </main>
+        <div class="disclaimer-section">
+            <p class="disclaimer">This output is generated by an AI tool rather than reproducing any original work or
+                content. While efforts are made to ensure accuracy, the content may contain errors or omissions and
+                should not be considered authoritative. Users must verify all information before relying on it.</p>
+        </div>
+        <form id="chat-form" class="chat-form">
+            <textarea id="user-input" rows="1" placeholder="Ask Toby anything about plumbing..."
+                autocomplete="off"></textarea>
+
+            <button type="submit">Send</button>
+        </form>
+
+    </div>
+
+  <script src="chatbot.js"></script>
+</body>
+</html>
