@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             wrapper.className = 'bot-message';
 
             const avatar = document.createElement('img');
-            avatar.src = 'https://capable-brioche-99db20.netlify.app/Toby-Avatar.webp';
+            avatar.src = 'https://tobytest.netlify.app/Toby-Avatar.webp';
             avatar.className = 'toby-avatar';
 
             div.className = 'toby-bubble toby-bot';
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const res = await fetch(
-                'https://capable-brioche-99db20.netlify.app/.netlify/functions/chat',
+                'https://tobytest.netlify.app/.netlify/functions/chat',
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
