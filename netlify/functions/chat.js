@@ -1,16 +1,31 @@
 const fetch = require('node-fetch');
 
-const ALLOWED_ORIGIN = 'https://masterplumbers.org.nz';
-const corsHeader = { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN };
+// ── CORS allowlist ────────────────────────────────────────────────────────────
+// Add any other origins the widget is legitimately embedded on (e.g. a staging
+// domain) to this list.
+const ALLOWED_ORIGINS = [
+  'https://masterplumbers.org.nz',
+  'https://www.masterplumbers.org.nz',
+];
+
+function getCorsHeader(event) {
+  const origin = event.headers.origin || event.headers.Origin;
+  const isAllowed = ALLOWED_ORIGINS.includes(origin);
+  // Echo back the matched origin so the browser accepts the response.
+  // If the origin isn't on the allowlist, omit the header entirely —
+  // the browser will then block the response from being read.
+  return isAllowed ? { 'Access-Control-Allow-Origin': origin } : {};
+}
 
 exports.handler = async (event) => {
+  const corsHeader = getCorsHeader(event);
 
   // ── CORS preflight ──────────────────────────────────────────────────────────
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+        ...corsHeader,
         'Access-Control-Allow-Headers': 'Content-Type',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
       },
