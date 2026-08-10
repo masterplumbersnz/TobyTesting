@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const ALLOWED_ORIGINS = [
   'https://masterplumbers.org.nz',
   'https://www.masterplumbers.org.nz',
+  'https://staff.masterplumbers.org.nz',
 ];
 
 function getCorsHeader(event) {
